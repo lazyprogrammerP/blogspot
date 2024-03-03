@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "server/**" # Trigger only when there are changes in the 'server' directory
+  workflow_dispatch:
 
 env:
   IMAGE: blogspot-server
