@@ -13,6 +13,17 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+# Set Environment Variables
+ARG JWT_SECRET
+ARG DATABASE_URL
+
+ENV PORT=8000
+ENV JWT_SECRET=$JWT_SECRET
+ENV DATABASE_URL=$DATABASE_URL
+
+# Generate Prisma Client
+RUN npm run setup
+
 # Build TypeScript files
 RUN npm run build
 
