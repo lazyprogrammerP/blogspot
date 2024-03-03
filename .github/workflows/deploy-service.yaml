@@ -26,5 +26,5 @@ jobs:
       - name: Build Docker Image
         working-directory: ./server
         run: |
-          docker build -t --build-arg JWT_SECRET="${{ secrets.JWT_SECRET }}" --build-arg DATABASE_URL="${{ secrets.DATABASE_URL }}" ${{ env.REGISTRY }}/${{ env.GITHUB_REPOSITORY }}/${{ env.IMAGE }} .
+          docker build -t --build-arg JWT_SECRET="${{ secrets.JWT_SECRET }}" --build-arg DATABASE_URL="${{ secrets.DATABASE_URL }}" ${{ env.REGISTRY }}/${{ env.GITHUB_REPOSITORY }}/${{ env.IMAGE }}:latest .
           docker push ghcr.io/${{ github.repository }}/blogspot-server:latest
