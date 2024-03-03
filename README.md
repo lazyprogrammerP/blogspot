@@ -1,6 +1,3 @@
-Certainly! You can create a README.md file in the root of your project repository and document the steps to run the code. Here's an example of how you can format it:
-
-```markdown
 # Blogspot Project
 
 This repository contains the code for the Blogspot project. Follow the instructions below to set it up and run the server or client.
