@@ -1,0 +1,30 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "server/**"
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t ${{ secrets.DOCKER_USERNAME }}/blogspot-server:latest \
+            --build-arg JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+            --build-arg DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+            ./server
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/blogspot-server:latest
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
