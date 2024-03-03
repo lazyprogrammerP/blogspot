@@ -1,0 +1,30 @@
+name: BlogSpot Server Docker Build and Push
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "server/**" # Trigger only when there are changes in the 'server' directory
+
+env:
+  IMAGE: blogspot-server
+  REGISTRY: ghcr.io
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Login to GitHub Container Registry
+        run: |
+        echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${REGISTRY} -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker Image
+        working-directory: ./server
+        run: |
+          docker build -t --build-arg JWT_SECRET="${{ secrets.JWT_SECRET }}" --build-arg DATABASE_URL="${{ secrets.DATABASE_URL }}" ${{ env.REGISTRY }}/${{ env.GITHUB_REPOSITORY }}/${{ env.IMAGE }} .
+          docker push ghcr.io/${{ github.repository }}/blogspot-server:latest
