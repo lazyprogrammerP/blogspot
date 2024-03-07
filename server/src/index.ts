@@ -5,6 +5,7 @@ import authRouter from "./routes/auth";
 import postRouter from "./routes/post";
 import publicPostRouter from "./routes/post/public";
 import HealthResponse from "./types/response/health";
+import publishPosts from "./jobs/publish-posts";
 
 dotenv.config();
 const PORT = process.env.PORT || 8000;
@@ -22,5 +23,13 @@ server.use("/api/v1/auth", authRouter);
 server.use("/api/v1/post/public", publicPostRouter);
 server.use("/api/v1/post", verifyToken, postRouter);
 
+// cron jobs
+publishPosts.start();
+
 // starts the server, no touching below this point
 server.listen(PORT, () => console.log(`server is listening on http://127.0.0.1:${PORT}`));
+
+// clean-up
+process.on("SIGINT", () => {
+  publishPosts.stop();
+});
